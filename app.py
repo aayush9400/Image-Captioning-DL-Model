@@ -12,9 +12,11 @@ import cv2
 from keras.preprocessing.sequence import pad_sequences
 from tqdm import tqdm
 
-from keyword import *
-import operator
+from rake_nltk import Rake
+import itertools
 
+r = Rake()
+flatten = itertools.chain.from_iterable
 
 vocab = np.load('mine_vocab.npy', allow_pickle=True)
 
@@ -110,7 +112,7 @@ def after():
 
     text_in = ['startofseq']
 
-    final = ''
+    caption = ''
 
     print("="*50)
     print("GETING Captions")
@@ -131,41 +133,22 @@ def after():
         sampled_word = inv_vocab[sampled_index]
 
         if sampled_word != 'endofseq':
-            final = final + ' ' + sampled_word
+            caption = caption + ' ' + sampled_word
 
         text_in.append(sampled_word)
 
-        # Split text into sentences
-        #sentenceList = split_sentences(final)
+    r.extract_keywords_from_text(caption)
+    k = r.get_ranked_phrases()
 
-        #stoppath = "FoxStoplist.txt" #Fox stoplist contains "numbers", so it will not find "natural numbers" like in Table 1.1
+    f_k = []
+    for key in k:
+        key = key.split(" ")
+        f_k.append(key)
+    
+    keywords = list(flatten(f_k))
+    print(keywords)
 
-        #stoppath = "SmartStoplist.txt"  #SMART stoplist misses some of the lower-scoring keywords in Figure 1.5, which means that the top 1/3 cuts off one of the 4.0 score words in Table 1.1
-        #stopwordpattern = build_stop_word_regex(stoppath)
-
-        # generate candidate keywords
-
-        #phraseList = generate_candidate_keywords(sentenceList, stopwordpattern)
-
-        # calculate individual word scores
-
-        #wordscores = calculate_word_scores(phraseList)
-
-        # generate candidate keyword scores
-
-        #keywordcandidates = generate_candidate_keyword_scores(phraseList, wordscores)
-
-        #sortedKeywords = sorted(keywordcandidates.items(), key=operator.itemgetter(1), reverse=True)
-
-        #totalKeywords = len(sortedKeywords)
-
-        #print sortedKeywords[0:(totalKeywords / 3)]
-
-        #rake = Rake("SmartStoplist.txt")
-        #keywords = rake.run(final)
-        #print (keywords)
-
-    return render_template('after.html', data=final)
+    return render_template('after.html', data=caption)
 
 if __name__ == "__main__":
     app.run(debug=True)
