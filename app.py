@@ -15,6 +15,8 @@ from tqdm import tqdm
 from rake_nltk import Rake
 import itertools
 
+import requests
+
 r = Rake()
 flatten = itertools.chain.from_iterable
 
@@ -146,7 +148,22 @@ def after():
         f_k.append(key)
     
     keywords = list(flatten(f_k))
-    print(keywords)
+    #print(keywords)
+    url = "http://127.0.0.1:8000/api/webhook/"
+
+    payload={'image_id': '3',
+            'caption': caption,
+            'keywords': keywords}
+    files=[
+
+    ]
+    headers = {}
+
+    response = requests.request("POST", url, headers=headers, data=payload, files=files)
+
+    print(response.text)
+
+
 
     return render_template('after.html', data=caption)
 
