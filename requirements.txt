@@ -1,0 +1,8 @@
+flask
+cv2
+keras
+numpy
+tqdm
+requests
+itertools
+rake_nltk
