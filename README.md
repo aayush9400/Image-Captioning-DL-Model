@@ -1,3 +1,3 @@
 # Image-Captioning-DL-Model
 
-This is DL Model built for the Board Infinity Hackathon.
+This is a DL Model built for the Board Infinity Hackathon.
