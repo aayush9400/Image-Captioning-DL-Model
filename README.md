@@ -1,3 +1,3 @@
 # Image-Captioning-DL-Model
 
-This is a DL Model built for the Board Infinity Hackathon.
+This is a Image Captioning Flask App using a Deep Learning Model Trained from scratch, built for the Board Infinity Hackathon.
